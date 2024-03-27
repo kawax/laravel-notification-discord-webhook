@@ -60,12 +60,10 @@ class DiscordMessage
 
     public function toArray(): array
     {
-        return collect(
-            [
-                'content' => $this->content,
-                'embeds' => $this->embeds,
-            ],
-        )->merge($this->options)
+        return collect([
+            'content' => $this->content,
+            'embeds' => $this->embeds,
+        ])->merge($this->options)
             ->reject(fn ($item) => blank($item))
             ->toArray();
     }
