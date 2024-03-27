@@ -8,9 +8,6 @@
         <include>
             <directory>src/</directory>
         </include>
-        <exclude>
-            <directory>src/Console/</directory>
-        </exclude>
     </source>
     <coverage>
         <report>
