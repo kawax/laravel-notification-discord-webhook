@@ -23,6 +23,10 @@ class DiscordChannel
          */
         $webhook_url = $notifiable->routeNotificationFor('discord-webhook');
 
+        if (empty($webhook_url)) {
+            return;
+        }
+
         Http::post($webhook_url, $message->toArray());
     }
 }
