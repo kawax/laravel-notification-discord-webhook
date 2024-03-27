@@ -55,7 +55,7 @@ class DiscordNotification extends Notification implements ShouldQueue
         return [DiscordChannel::class];
     }
 
-    public function toDiscordWebHook($notifiable): DiscordMessage
+    public function toDiscordWebhook($notifiable): DiscordMessage
     {
         return DiscordMessage::create(content: $this->content);
     }
@@ -94,7 +94,7 @@ $user->notify(new DiscordNotification('test'));
 ### Send embeds
 
 ```php
-    public function toDiscordWebHook($notifiable): DiscordMessage
+    public function toDiscordWebhook($notifiable): DiscordMessage
     {
         return DiscordMessage::create()
                               ->embeds([
@@ -109,7 +109,7 @@ $user->notify(new DiscordNotification('test'));
 ### Send any message
 
 ```php
-    public function toDiscordWebHook($notifiable): DiscordMessage
+    public function toDiscordWebhook($notifiable): DiscordMessage
     {
         return DiscordMessage::create()
                               ->with([
