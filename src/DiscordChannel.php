@@ -2,11 +2,15 @@
 
 namespace Revolution\Laravel\Notification\DiscordWebhook;
 
+use Illuminate\Http\Client\RequestException;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\Http;
 
 class DiscordChannel
 {
+    /**
+     * @throws RequestException
+     */
     public function send(mixed $notifiable, Notification $notification): void
     {
         /**
@@ -27,6 +31,6 @@ class DiscordChannel
             return;
         }
 
-        Http::post($webhook_url, $message->toArray());
+        Http::post($webhook_url, $message->toArray())->throw();
     }
 }
