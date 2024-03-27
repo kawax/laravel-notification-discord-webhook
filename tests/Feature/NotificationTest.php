@@ -54,11 +54,25 @@ class NotificationTest extends TestCase
 
     public function test_message()
     {
-        $m = new DiscordMessage(content: 'test');
-        $m->embeds([['embeds' => 'test']])
+        $m = (new DiscordMessage(content: 'test'))
+            ->embeds([['embeds' => 'test']])
             ->with(['with' => 'test']);
 
         $this->assertSame(['content' => 'test', 'embeds' => [['embeds' => 'test']], 'with' => 'test'], $m->toArray());
+    }
+
+    public function test_message_embeds()
+    {
+        $m = new DiscordMessage(embeds: [['embeds' => 'test']]);
+
+        $this->assertSame(['embeds' => [['embeds' => 'test']]], $m->toArray());
+    }
+
+    public function test_message_with()
+    {
+        $m = (new DiscordMessage())->with(['with' => 'test']);
+
+        $this->assertSame(['with' => 'test'], $m->toArray());
     }
 
     public function test_message_invalid()
