@@ -47,7 +47,7 @@ class DiscordMessage
 
     public function isValid(): bool
     {
-        if (filled($this->content) || filled($this->embeds || Arr::has($this->options, 'components'))) {
+        if (filled($this->content) || filled($this->embeds || Arr::hasAny($this->options, ['content', 'embeds', 'components']))) {
             return true;
         }
 
