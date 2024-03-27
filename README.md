@@ -19,7 +19,7 @@ composer require revolution/laravel-notification-discord-webhook
 ### config/services.php
 ```php
     'discord' => [
-        'webhook'        => env('DISCORD_WEBHOOK'),
+        'webhook' => env('DISCORD_WEBHOOK'),
     ],
 ```
 
