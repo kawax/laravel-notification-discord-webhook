@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Client\Request;
+use Illuminate\Http\Client\RequestException;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Notification;
@@ -32,6 +33,8 @@ class NotificationTest extends TestCase
         Http::fake([
             '*' => Http::response('', 500),
         ]);
+
+        $this->expectException(RequestException::class);
 
         Notification::route('discord-webhook', config('services.discord.webhook'))
             ->notify(new TestNotification('test'));
