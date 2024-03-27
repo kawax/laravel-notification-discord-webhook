@@ -1,5 +1,5 @@
 {
-  "name": "revolution/laravel-notification-discord-webhhok",
+  "name": "revolution/laravel-notification-discord-webhook",
   "description": "Laravel Notification for Discord(Webhook)",
   "keywords": [
     "discord",
