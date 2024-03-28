@@ -2,7 +2,6 @@
 
 https://discord.com/developers/docs/resources/webhook#execute-webhook
 
-
 ## Requirements
 - PHP >= 8.1
 - Laravel >= 10.0
@@ -15,6 +14,8 @@ composer require revolution/laravel-notification-discord-webhook
 ```
 
 ## Config
+Get the webhook url from your Discord server settings.  
+https://support.discord.com/hc/en-us/articles/228383668-Intro-to-Webhooks
 
 ### config/services.php
 ```php
@@ -25,7 +26,7 @@ composer require revolution/laravel-notification-discord-webhook
 
 ### .env
 ```
-DISCORD_WEBHOOK="https://discord.com/api/webhooks/..."
+DISCORD_WEBHOOK=https://discord.com/api/webhooks/...
 ```
 
 ## Usage
