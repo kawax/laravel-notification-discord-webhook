@@ -111,9 +111,9 @@ $user->notify(new DiscordNotification('test'));
 ```php
     public function toDiscordWebhook($notifiable): DiscordMessage
     {
-        return DiscordMessage::create()
+        return DiscordMessage::create(content: $this->content)
                               ->with([
-                                  'content' => $this->content,
+                                  'components' => [],
                                ]);
     }
 ```
