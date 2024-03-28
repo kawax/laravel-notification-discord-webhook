@@ -56,7 +56,7 @@ class DiscordNotification extends Notification implements ShouldQueue
         return [DiscordChannel::class];
     }
 
-    public function toDiscordWebhook($notifiable): DiscordMessage
+    public function toDiscordWebhook(object $notifiable): DiscordMessage
     {
         return DiscordMessage::create(content: $this->content);
     }
@@ -95,22 +95,59 @@ $user->notify(new DiscordNotification('test'));
 ### Send embeds
 
 ```php
-    public function toDiscordWebhook($notifiable): DiscordMessage
+    public function toDiscordWebhook(object $notifiable): DiscordMessage
     {
         return DiscordMessage::create()
                               ->embeds([
                                   [
                                       'title' => 'INFO',
                                       'description' => $this->content,
-                                  ]
+                                      'url' => route('home'),
+                                  ],
                               ]);
+    }
+```
+
+### Send attachment files
+
+```php
+use Revolution\Laravel\Notification\DiscordWebhook\DiscordAttachment;
+use Illuminate\Support\Facades\Storage;
+
+    public function toDiscordWebhook(object $notifiable): DiscordMessage
+    {
+        return DiscordMessage::create()
+                              ->embeds([
+                                  [
+                                      'title' => 'test',
+                                      'description' => $this->content,
+                                      'thumbnail' => [
+                                          'url' => 'attachment://test.jpg',
+                                      ],
+                                      'image' => [
+                                          'url' => 'attachment://test2.jpg',
+                                      ],
+                                  ],
+                              ]);
+                              ->file(DiscordAttachment::make(
+                                   content: Storage::get('test.jpg'),
+                                   filename: 'test.jpg', 
+                                   description: 'test', 
+                                   filetype: 'image/jpg'
+                              ))
+                              ->file(new DiscordAttachment(
+                                   content: Storage::get('test2.jpg'),
+                                   filename: 'test2.jpg', 
+                                   description: 'test2', 
+                                   filetype: 'image/jpg'
+                              ));
     }
 ```
 
 ### Send any message
 
 ```php
-    public function toDiscordWebhook($notifiable): DiscordMessage
+    public function toDiscordWebhook(object $notifiable): DiscordMessage
     {
         return DiscordMessage::create(content: $this->content)
                               ->with([
@@ -118,8 +155,6 @@ $user->notify(new DiscordNotification('test'));
                                ]);
     }
 ```
-
-File upload is not supported.
 
 ## LICENSE
 MIT  

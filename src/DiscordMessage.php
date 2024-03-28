@@ -6,6 +6,11 @@ use Illuminate\Support\Arr;
 
 class DiscordMessage
 {
+    /**
+     * @var array<DiscordAttachment>
+     */
+    protected array $attachments = [];
+
     protected array $options = [];
 
     public function __construct(
@@ -38,6 +43,18 @@ class DiscordMessage
         return $this;
     }
 
+    public function file(DiscordAttachment $attachment): static
+    {
+        $this->attachments[] = $attachment;
+
+        return $this;
+    }
+
+    public function attachments(): array
+    {
+        return $this->attachments;
+    }
+
     public function with(array $options): static
     {
         $this->options = $options;
@@ -47,14 +64,22 @@ class DiscordMessage
 
     public function isValid(): bool
     {
-        return Arr::hasAny($this->toArray(), ['content', 'embeds', 'components']);
+        return Arr::hasAny($this->toArray(), ['content', 'embeds', 'components', 'attachments']);
     }
 
     public function toArray(): array
     {
+        $attachments = collect($this->attachments())
+            ->map(fn (DiscordAttachment $attachment, int $id) => [
+                'id' => $id,
+                'description' => $attachment->description,
+                'filename' => $attachment->filename,
+            ])->toArray();
+
         return collect([
             'content' => $this->content,
             'embeds' => $this->embeds,
+            'attachments' => $attachments,
         ])->merge($this->options)
             ->reject(fn ($item) => blank($item))
             ->toArray();

@@ -2,6 +2,7 @@
 
 namespace Revolution\Laravel\Notification\DiscordWebhook;
 
+use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Http\Client\RequestException;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\Http;
@@ -31,6 +32,19 @@ class DiscordChannel
             return;
         }
 
-        Http::post($webhook_url, $message->toArray())->throw();
+        Http::attach(
+            name: 'payload_json',
+            contents: json_encode($message->toArray()),
+            headers: ['Content-Type' => 'application/json']
+        )->when(filled($message->attachments()), function (PendingRequest $client) use ($message) {
+            foreach ($message->attachments() as $id => $attach) {
+                $client->attach(
+                    name: "files[$id]",
+                    contents: $attach->content,
+                    filename: $attach->filename,
+                    headers: ['Content-Type' => $attach->filetype]
+                );
+            }
+        })->post($webhook_url)->throw();
     }
 }

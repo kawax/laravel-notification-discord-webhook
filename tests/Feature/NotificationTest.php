@@ -5,9 +5,13 @@ namespace Tests\Feature;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Client\Request;
 use Illuminate\Http\Client\RequestException;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+use Revolution\Laravel\Notification\DiscordWebhook\DiscordAttachment;
 use Revolution\Laravel\Notification\DiscordWebhook\DiscordChannel;
 use Revolution\Laravel\Notification\DiscordWebhook\DiscordMessage;
 use Tests\TestCase;
@@ -24,7 +28,10 @@ class NotificationTest extends TestCase
         Http::assertSentCount(1);
 
         Http::assertSent(function (Request $request) {
-            return $request['content'] === 'test';
+            return $request->isMultipart()
+                && $request[0]['name'] === 'payload_json'
+                && $request[0]['contents'] === '{"content":"test"}'
+                && empty($request[1]);
         });
     }
 
@@ -89,6 +96,37 @@ class NotificationTest extends TestCase
         $this->assertFalse(DiscordMessage::create(content: '', embeds: [])->with(['test' => 'test'])->isValid());
     }
 
+    public function test_notification_attachments()
+    {
+        Http::fake();
+
+        Notification::route('discord-webhook', config('services.discord.webhook'))
+            ->notify(new TestFileNotification(content: 'test'));
+
+        Http::assertSentCount(1);
+
+        Http::assertSent(function (Request $request) {
+            return $request->isMultipart()
+                && $request[0]['name'] === 'payload_json'
+                && Str::contains($request[0]['contents'], 'test')
+                && $request[1]['name'] === 'files[0]'
+                && $request[1]['filename'] === 'test';
+        });
+    }
+
+    public function test_message_attachments()
+    {
+        Storage::fake('discord');
+
+        $m = DiscordMessage::create()
+            ->file(DiscordAttachment::make(content: UploadedFile::fake()->image('test')->getContent(), filename: 'test', description: 'test', filetype: 'image/jpeg'))
+            ->file(new DiscordAttachment(content: UploadedFile::fake()->image('test2')->getContent(), filename: 'test2', description: 'test2', filetype: 'image/jpeg'));
+
+        $this->assertIsArray($m->attachments());
+        $this->assertCount(2, $m->attachments());
+        $this->assertTrue($m->isValid());
+    }
+
     public function test_user_notify()
     {
         Http::fake();
@@ -120,6 +158,26 @@ class TestNotification extends \Illuminate\Notifications\Notification
             ->content($this->content)
             ->embeds([])
             ->with([]);
+    }
+}
+
+class TestFileNotification extends \Illuminate\Notifications\Notification
+{
+    public function __construct(
+        protected string $content,
+    )
+    {
+    }
+
+    public function via(object $notifiable): array
+    {
+        return [DiscordChannel::class];
+    }
+
+    public function toDiscordWebhook(object $notifiable): DiscordMessage
+    {
+        return DiscordMessage::create(content: $this->content)
+            ->file(DiscordAttachment::make(content: UploadedFile::fake()->image('test')->getContent(), filename: 'test', description: 'test', filetype: 'image/jpeg'));
     }
 }
 
