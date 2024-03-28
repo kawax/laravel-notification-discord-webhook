@@ -47,15 +47,7 @@ class DiscordMessage
 
     public function isValid(): bool
     {
-        if (
-            filled($this->content)
-            || filled($this->embeds)
-            || Arr::hasAny($this->options, ['content', 'embeds', 'components'])
-        ) {
-            return true;
-        }
-
-        return false;
+        return Arr::hasAny($this->toArray(), ['content', 'embeds', 'components']);
     }
 
     public function toArray(): array
