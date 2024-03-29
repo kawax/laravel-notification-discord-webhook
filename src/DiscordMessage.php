@@ -2,9 +2,11 @@
 
 namespace Revolution\Laravel\Notification\DiscordWebhook;
 
+use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\Contracts\Support\Jsonable;
 use Illuminate\Support\Arr;
 
-class DiscordMessage
+class DiscordMessage implements Arrayable, Jsonable
 {
     /**
      * @var array<DiscordAttachment>
@@ -65,6 +67,11 @@ class DiscordMessage
     public function isValid(): bool
     {
         return Arr::hasAny($this->toArray(), ['content', 'embeds', 'components', 'attachments']);
+    }
+
+    public function toJson($options = 0): string
+    {
+        return collect($this->toArray())->toJson($options);
     }
 
     public function toArray(): array
