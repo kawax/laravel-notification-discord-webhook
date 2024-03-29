@@ -5,9 +5,12 @@ namespace Revolution\Laravel\Notification\DiscordWebhook;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Traits\Conditionable;
 
 class DiscordMessage implements Arrayable, Jsonable
 {
+    use Conditionable;
+
     /**
      * @var array<DiscordAttachment>
      */
