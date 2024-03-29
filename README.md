@@ -68,7 +68,7 @@ class DiscordNotification extends Notification implements ShouldQueue
 ```php
 use Illuminate\Support\Facades\Notification;
 
-Notification::route('discord-webhook', config('services.discord.webhook')))
+Notification::route('discord-webhook', config('services.discord.webhook'))
             ->notify(new DiscordNotification('test'));
 ```
 
