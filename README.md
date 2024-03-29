@@ -110,6 +110,25 @@ $user->notify(new DiscordNotification('test'));
 
 ### Send attachment files
 
+Send only file. `content` and `filename` are required.
+```php
+use Revolution\Laravel\Notification\DiscordWebhook\DiscordAttachment;
+use Illuminate\Support\Facades\Storage;
+
+    public function toDiscordWebhook(object $notifiable): DiscordMessage
+    {
+        return DiscordMessage::create()
+            ->file(
+                DiscordAttachment::make(
+                    content: Storage::get('test.png'),
+                    filename: 'test.png',
+                    description: 'test',
+                    filetype: 'image/png'
+                ));
+    }
+```
+
+Using files in embed.
 ```php
 use Revolution\Laravel\Notification\DiscordWebhook\DiscordAttachment;
 use Illuminate\Support\Facades\Storage;
