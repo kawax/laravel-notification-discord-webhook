@@ -34,7 +34,7 @@ class DiscordChannel
 
         Http::attach(
             name: 'payload_json',
-            contents: json_encode($message->toArray()),
+            contents: $message->toJson(),
             headers: ['Content-Type' => 'application/json']
         )->when(filled($message->attachments()), function (PendingRequest $client) use ($message) {
             foreach ($message->attachments() as $id => $attach) {
