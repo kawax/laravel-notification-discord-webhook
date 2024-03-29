@@ -21,6 +21,6 @@ class DiscordAttachment
         string $filetype = '',
     ): static
     {
-        return new static($content, $filename, $description, $filetype);
+        return new static(content: $content, filename: $filename, description: $description, filetype: $filetype);
     }
 }
