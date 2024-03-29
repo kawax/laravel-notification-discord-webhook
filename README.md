@@ -168,9 +168,10 @@ use Illuminate\Support\Facades\Storage;
 ```php
     public function toDiscordWebhook(object $notifiable): DiscordMessage
     {
-        return DiscordMessage::create(content: $this->content)
+        return DiscordMessage::create()
                               ->with([
-                                  'components' => [],
+                                  'content' => $this->content,
+                                  'embeds' => [[]],
                                ]);
     }
 ```
