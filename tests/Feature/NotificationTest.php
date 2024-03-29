@@ -66,6 +66,7 @@ class NotificationTest extends TestCase
             ->with(['with' => 'test']);
 
         $this->assertSame(['content' => 'test', 'embeds' => [['embeds' => 'test']], 'with' => 'test'], $m->toArray());
+        $this->assertJson(json_encode(['content' => 'test', 'embeds' => [['embeds' => 'test']], 'with' => 'test']), $m->toJson());
     }
 
     public function test_message_embeds()
