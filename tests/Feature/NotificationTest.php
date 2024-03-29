@@ -120,8 +120,8 @@ class NotificationTest extends TestCase
         Storage::fake('discord');
 
         $m = DiscordMessage::create()
-            ->file(DiscordAttachment::make(content: UploadedFile::fake()->image('test')->getContent(), filename: 'test', description: 'test', filetype: 'image/jpeg'))
-            ->file(new DiscordAttachment(content: UploadedFile::fake()->image('test2')->getContent(), filename: 'test2', description: 'test2', filetype: 'image/jpeg'));
+            ->file(DiscordAttachment::make(content: UploadedFile::fake()->image('test')->get(), filename: 'test', description: 'test', filetype: 'image/jpeg'))
+            ->file(new DiscordAttachment(content: UploadedFile::fake()->image('test2')->get(), filename: 'test2', description: 'test2', filetype: 'image/jpeg'));
 
         $this->assertIsArray($m->attachments());
         $this->assertCount(2, $m->attachments());
@@ -178,7 +178,7 @@ class TestFileNotification extends \Illuminate\Notifications\Notification
     public function toDiscordWebhook(object $notifiable): DiscordMessage
     {
         return DiscordMessage::create(content: $this->content)
-            ->file(DiscordAttachment::make(content: UploadedFile::fake()->image('test')->getContent(), filename: 'test', description: 'test', filetype: 'image/jpeg'));
+            ->file(DiscordAttachment::make(content: UploadedFile::fake()->image('test')->get(), filename: 'test', description: 'test', filetype: 'image/jpeg'));
     }
 }
 
