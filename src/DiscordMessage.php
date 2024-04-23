@@ -20,18 +20,16 @@ class DiscordMessage implements Arrayable, Jsonable
 
     public function __construct(
         protected ?string $content = null,
-        protected ?array  $embeds = null,
-    )
-    {
+        protected ?array $embeds = null,
+    ) {
         //
     }
 
     public static function create(
         ?string $content = null,
-        ?array  $embeds = null,
-    ): static
-    {
-        return new static(content: $content, embeds: $embeds);
+        ?array $embeds = null,
+    ): static {
+        return new static(...func_get_args());
     }
 
     public function content(string $content): static
