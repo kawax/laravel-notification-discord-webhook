@@ -9,8 +9,7 @@ class DiscordAttachment
         readonly public string $filename,
         readonly public string $description = '',
         readonly public string $filetype = '',
-    )
-    {
+    ) {
         //
     }
 
@@ -19,8 +18,7 @@ class DiscordAttachment
         string $filename,
         string $description = '',
         string $filetype = '',
-    ): static
-    {
-        return new static(content: $content, filename: $filename, description: $description, filetype: $filetype);
+    ): static {
+        return new static(...func_get_args());
     }
 }
