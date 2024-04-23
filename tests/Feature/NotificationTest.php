@@ -144,8 +144,7 @@ class TestNotification extends \Illuminate\Notifications\Notification
 {
     public function __construct(
         protected string $content,
-    )
-    {
+    ) {
     }
 
     public function via(object $notifiable): array
@@ -166,8 +165,7 @@ class TestFileNotification extends \Illuminate\Notifications\Notification
 {
     public function __construct(
         protected string $content,
-    )
-    {
+    ) {
     }
 
     public function via(object $notifiable): array
