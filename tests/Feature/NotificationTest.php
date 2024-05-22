@@ -123,8 +123,8 @@ class NotificationTest extends TestCase
             ->file(DiscordAttachment::make(content: UploadedFile::fake()->image('test')->get(), filename: 'test', description: 'test', filetype: 'image/jpeg'))
             ->file(new DiscordAttachment(content: UploadedFile::fake()->image('test2')->get(), filename: 'test2', description: 'test2', filetype: 'image/jpeg'));
 
-        $this->assertIsArray($m->attachments());
-        $this->assertCount(2, $m->attachments());
+        $this->assertIsArray($m->getAttachments());
+        $this->assertCount(2, $m->getAttachments());
         $this->assertTrue($m->isValid());
     }
 
