@@ -53,7 +53,7 @@ class DiscordMessage implements Arrayable, Jsonable
         return $this;
     }
 
-    public function attachments(): array
+    public function getAttachments(): array
     {
         return $this->attachments;
     }
@@ -77,7 +77,7 @@ class DiscordMessage implements Arrayable, Jsonable
 
     public function toArray(): array
     {
-        $attachments = collect($this->attachments())
+        $attachments = collect($this->getAttachments())
             ->map(fn (DiscordAttachment $attachment, int $id) => [
                 'id' => $id,
                 'description' => $attachment->description,
