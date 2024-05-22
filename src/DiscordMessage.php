@@ -53,6 +53,9 @@ class DiscordMessage implements Arrayable, Jsonable
         return $this;
     }
 
+    /**
+     * @internal
+     */
     public function getAttachments(): array
     {
         return $this->attachments;
