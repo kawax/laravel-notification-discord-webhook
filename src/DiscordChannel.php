@@ -36,8 +36,8 @@ class DiscordChannel
             name: 'payload_json',
             contents: $message->toJson(),
             headers: ['Content-Type' => 'application/json']
-        )->when(filled($message->attachments()), function (PendingRequest $client) use ($message) {
-            foreach ($message->attachments() as $id => $attach) {
+        )->when(filled($message->getAttachments()), function (PendingRequest $client) use ($message) {
+            foreach ($message->getAttachments() as $id => $attach) {
                 $client->attach(
                     name: "files[$id]",
                     contents: $attach->content,
