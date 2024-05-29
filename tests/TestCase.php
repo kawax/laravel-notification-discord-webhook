@@ -6,7 +6,7 @@ namespace Tests;
 
 use Illuminate\Foundation\Application;
 
-class TestCase extends \Orchestra\Testbench\TestCase
+abstract class TestCase extends \Orchestra\Testbench\TestCase
 {
     /**
      * Load package service provider.
