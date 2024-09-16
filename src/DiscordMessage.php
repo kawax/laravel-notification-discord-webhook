@@ -6,10 +6,12 @@ use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Traits\Conditionable;
+use Illuminate\Support\Traits\Macroable;
 
-class DiscordMessage implements Arrayable, Jsonable
+final class DiscordMessage implements Arrayable, Jsonable
 {
     use Conditionable;
+    use Macroable;
 
     /**
      * @var array<DiscordAttachment>
@@ -28,25 +30,25 @@ class DiscordMessage implements Arrayable, Jsonable
     public static function create(
         ?string $content = null,
         ?array $embeds = null,
-    ): static {
-        return new static(...func_get_args());
+    ): self {
+        return new self(...func_get_args());
     }
 
-    public function content(string $content): static
+    public function content(string $content): self
     {
         $this->content = $content;
 
         return $this;
     }
 
-    public function embeds(array $embeds): static
+    public function embeds(array $embeds): self
     {
         $this->embeds = $embeds;
 
         return $this;
     }
 
-    public function file(DiscordAttachment $attachment): static
+    public function file(DiscordAttachment $attachment): self
     {
         $this->attachments[] = $attachment;
 
@@ -61,7 +63,7 @@ class DiscordMessage implements Arrayable, Jsonable
         return $this->attachments;
     }
 
-    public function with(array $options): static
+    public function with(array $options): self
     {
         $this->options = $options;
 
