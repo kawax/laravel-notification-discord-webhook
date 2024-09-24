@@ -95,16 +95,19 @@ $user->notify(new DiscordNotification('test'));
 ### Send embeds
 
 ```php
+use Revolution\Laravel\Notification\DiscordWebhook\DiscordMessage;
+use Revolution\Laravel\Notification\DiscordWebhook\DiscordEmbed;
+
     public function toDiscordWebhook(object $notifiable): DiscordMessage
     {
         return DiscordMessage::create()
-                              ->embeds([
-                                  [
-                                      'title' => 'INFO',
-                                      'description' => $this->content,
-                                      'url' => route('home'),
-                                  ],
-                              ]);
+                              ->embed(
+                                  DiscordEmbed::make(
+                                      title: 'INFO',
+                                      description: $this->content,
+                                      url: route('home'),
+                                  )
+                              );
     }
 ```
 
@@ -131,23 +134,20 @@ use Illuminate\Support\Facades\Storage;
 Using files in embed.
 ```php
 use Revolution\Laravel\Notification\DiscordWebhook\DiscordAttachment;
+use Revolution\Laravel\Notification\DiscordWebhook\DiscordEmbed;
 use Illuminate\Support\Facades\Storage;
 
     public function toDiscordWebhook(object $notifiable): DiscordMessage
     {
         return DiscordMessage::create()
-                              ->embeds([
-                                  [
-                                      'title' => 'test',
-                                      'description' => $this->content,
-                                      'thumbnail' => [
-                                          'url' => 'attachment://test.jpg',
-                                      ],
-                                      'image' => [
-                                          'url' => 'attachment://test2.jpg',
-                                      ],
-                                  ],
-                              ]);
+                              ->embed(
+                                    DiscordEmbed::make(
+                                        title: 'test',
+                                        description: $this->content,
+                                        image: 'attachment://test.jpg',
+                                        thumbnail: 'attachment://test2.jpg',
+                                    )
+                              );
                               ->file(DiscordAttachment::make(
                                    content: Storage::get('test.jpg'),
                                    filename: 'test.jpg', 
