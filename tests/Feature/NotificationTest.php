@@ -14,6 +14,7 @@ use Illuminate\Support\Str;
 use Revolution\Laravel\Notification\DiscordWebhook\DiscordAttachment;
 use Revolution\Laravel\Notification\DiscordWebhook\DiscordChannel;
 use Revolution\Laravel\Notification\DiscordWebhook\DiscordMessage;
+use Revolution\Laravel\Notification\DiscordWebhook\DiscordEmbed;
 use Tests\TestCase;
 
 class NotificationTest extends TestCase
@@ -138,13 +139,39 @@ class NotificationTest extends TestCase
 
         Http::assertSentCount(1);
     }
+
+    public function test_embed()
+    {
+        $embed = DiscordEmbed::make(
+            title: 'title',
+            description: 'description',
+            url: 'url',
+            image: 'image',
+            thumbnail: 'thumbnail'
+        )->with(['color' => 'color']);
+
+        $this->assertSame(['title' => 'title', 'description' => 'description', 'url' => 'url', 'image' => ['url' => 'image'], 'thumbnail' => ['url' => 'thumbnail'], 'color' => 'color'], $embed->toArray());
+    }
+
+    public function test_message_embed()
+    {
+        $embed = DiscordEmbed::make(
+            title: 'title',
+        );
+
+        $m = DiscordMessage::create()
+            ->embed($embed);
+
+        $this->assertSame(['title' => 'title'], $m->toArray()['embeds'][0]);
+    }
 }
 
 class TestNotification extends \Illuminate\Notifications\Notification
 {
     public function __construct(
         protected string $content,
-    ) {
+    )
+    {
     }
 
     public function via(object $notifiable): array
@@ -165,7 +192,8 @@ class TestFileNotification extends \Illuminate\Notifications\Notification
 {
     public function __construct(
         protected string $content,
-    ) {
+    )
+    {
     }
 
     public function via(object $notifiable): array

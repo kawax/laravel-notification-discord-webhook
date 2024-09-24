@@ -22,21 +22,30 @@ final class DiscordMessage implements Arrayable, Jsonable
 
     public function __construct(
         protected ?string $content = null,
-        protected ?array $embeds = null,
-    ) {
+        protected array   $embeds = [],
+    )
+    {
         //
     }
 
     public static function create(
         ?string $content = null,
-        ?array $embeds = null,
-    ): self {
+        array   $embeds = [],
+    ): self
+    {
         return new self(...func_get_args());
     }
 
     public function content(string $content): self
     {
         $this->content = $content;
+
+        return $this;
+    }
+
+    public function embed(array|Arrayable $embed): self
+    {
+        $this->embeds[] = $embed instanceof Arrayable ? $embed->toArray() : $embed;
 
         return $this;
     }
