@@ -8,9 +8,13 @@ https://discord.com/developers/docs/resources/webhook#execute-webhook
 
 ## Installation
 
-### Composer
-```
+```shell
 composer require revolution/laravel-notification-discord-webhook
+```
+
+### Uninstall
+```shell
+composer remove revolution/laravel-notification-discord-webhook
 ```
 
 ## Config
