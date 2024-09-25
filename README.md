@@ -119,6 +119,7 @@ use Revolution\Laravel\Notification\DiscordWebhook\DiscordEmbed;
 
 Send only file. `content` and `filename` are required.
 ```php
+use Revolution\Laravel\Notification\DiscordWebhook\DiscordMessage;
 use Revolution\Laravel\Notification\DiscordWebhook\DiscordAttachment;
 use Illuminate\Support\Facades\Storage;
 
@@ -137,6 +138,7 @@ use Illuminate\Support\Facades\Storage;
 
 Using files in embed.
 ```php
+use Revolution\Laravel\Notification\DiscordWebhook\DiscordMessage;
 use Revolution\Laravel\Notification\DiscordWebhook\DiscordAttachment;
 use Revolution\Laravel\Notification\DiscordWebhook\DiscordEmbed;
 use Illuminate\Support\Facades\Storage;
