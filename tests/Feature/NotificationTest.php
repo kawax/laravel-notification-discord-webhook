@@ -6,7 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Client\Request;
 use Illuminate\Http\Client\RequestException;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Notifications\Events\NotificationSent;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Storage;
@@ -38,16 +40,20 @@ class NotificationTest extends TestCase
 
     public function test_notification_failed()
     {
+        Event::fake();
+
         Http::fake([
             '*' => Http::response('', 500),
         ]);
-
-        $this->expectException(RequestException::class);
 
         Notification::route('discord-webhook', config('services.discord.webhook'))
             ->notify(new TestNotification('test'));
 
         Http::assertSentCount(1);
+
+        Event::assertDispatched(function (NotificationSent $event) {
+            return $event->response->failed();
+        });
     }
 
     public function test_notification_fake()
@@ -147,7 +153,7 @@ class NotificationTest extends TestCase
             description: 'description',
             url: 'url',
             image: 'image',
-            thumbnail: 'thumbnail'
+            thumbnail: 'thumbnail',
         )->with(['color' => 'color']);
 
         $this->assertSame(['title' => 'title', 'description' => 'description', 'url' => 'url', 'image' => ['url' => 'image'], 'thumbnail' => ['url' => 'thumbnail'], 'color' => 'color'], $embed->toArray());
@@ -170,8 +176,7 @@ class TestNotification extends \Illuminate\Notifications\Notification
 {
     public function __construct(
         protected string $content,
-    )
-    {
+    ) {
     }
 
     public function via(object $notifiable): array
@@ -192,8 +197,7 @@ class TestFileNotification extends \Illuminate\Notifications\Notification
 {
     public function __construct(
         protected string $content,
-    )
-    {
+    ) {
     }
 
     public function via(object $notifiable): array
