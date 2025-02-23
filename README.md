@@ -3,8 +3,8 @@
 https://discord.com/developers/docs/resources/webhook#execute-webhook
 
 ## Requirements
-- PHP >= 8.1
-- Laravel >= 10.0
+- PHP >= 8.2
+- Laravel >= 11.0
 
 ## Installation
 
